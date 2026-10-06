@@ -1,0 +1,11 @@
+import {chromium} from '@playwright/test';
+const base=process.env.FLYDUCK_BASE;const browser=await chromium.launch({headless:true,executablePath:process.env.CHROMIUM_PATH,args:['--no-sandbox','--enable-unsafe-swiftshader']});
+const page=await browser.newPage({viewport:{width:1200,height:900}});const logs=[];page.on('console',m=>logs.push(m.type()+': '+m.text().slice(0,300)));page.on('pageerror',e=>logs.push('PAGEERROR: '+e.message));
+await page.goto(base+'/?brain=male&low');
+const t0=Date.now();await page.waitForFunction(()=>window.flyduck?.ready||window.flyduck?.error,null,{timeout:150000}).catch(()=>{});
+console.log('elapsed s',((Date.now()-t0)/1000).toFixed(0),'ready=',await page.evaluate(()=>window.flyduck?.ready),'error=',await page.evaluate(()=>window.flyduck?.error),'download=',await page.evaluate(()=>JSON.stringify(window.flyduck?.download)));
+console.log('loadtext=',await page.evaluate(()=>document.getElementById('load-text')?.textContent));
+console.log('obstacle api:',await page.evaluate(()=>{try{return String(window.flyduckSim?.setObstacle?.(0,.3,-.2,true));}catch(e){return 'throw '+e.message;}}));
+console.log('geom_pos type:',await page.evaluate(()=>{try{const s=window.flyduckSim;return s?'sim ok':'no sim';}catch(e){return e.message}}));
+console.log('--- console ---');for(const l of logs.slice(0,25))console.log(l);
+await browser.close();

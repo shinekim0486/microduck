@@ -1,0 +1,10 @@
+import {chromium} from '@playwright/test';
+const base=process.env.FLYDUCK_BASE;const browser=await chromium.launch({headless:true,executablePath:process.env.CHROMIUM_PATH,args:['--no-sandbox','--enable-unsafe-swiftshader']});
+let page=await browser.newPage({viewport:{width:1440,height:1000}});
+await page.goto(base+'/?brain=male&low');await page.waitForFunction(()=>window.flyduck?.ready||window.flyduck?.error,null,{timeout:180000});
+await page.locator('#scent-left').click();await page.waitForTimeout(5000);
+await page.locator('.experiment').screenshot({path:'shots/male-panel.png'});await page.locator('.flow').screenshot({path:'shots/male-flow.png'});await page.close();
+page=await browser.newPage({viewport:{width:1600,height:1100}});await page.goto(base+'/compare.html');
+await page.waitForFunction(()=>document.getElementById('col-female').classList.contains('ready')&&document.getElementById('col-male').classList.contains('ready'),null,{timeout:240000});
+await page.locator('[data-cmd="left"]').click();await page.waitForTimeout(5000);
+await page.locator('.duel').screenshot({path:'shots/compare-duel.png'});console.log('shots ok');await browser.close();

@@ -1,0 +1,113 @@
+import {chromium} from '@playwright/test';
+import * as THREE from 'three';
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+const browser=await chromium.launch({headless:true,executablePath:process.env.CHROMIUM_PATH??'/opt/pw-browsers/chromium-1243/chrome-linux64/chrome',args:['--no-sandbox','--enable-unsafe-swiftshader']});
+const output=process.env.FLYDUCK_EVIDENCE??'test-results';fs.mkdirSync(output,{recursive:true});
+const page=await browser.newPage({viewport:{width:390,height:844},hasTouch:true}),errors=[],report={};
+page.on('pageerror',e=>errors.push(e.message));
+const snap=()=>page.evaluate(()=>structuredClone(window.flyduck));
+function checkFollowing(s){
+  const v=s.camera,p=s.state,offset=v.position.map((n,i)=>n-v.target[i]),horizontal=Math.hypot(offset[0],offset[2]);
+  assert.ok(Math.abs(v.target[0]-p.x)<1e-8&&Math.abs(v.target[2]+p.y)<1e-8);
+  assert.ok(Math.abs((offset[0]*Math.cos(p.yaw)-offset[2]*Math.sin(p.yaw))/horizontal+1)<1e-8);
+  assert.ok(Math.abs(offset[1]/Math.hypot(...offset)-.83/Math.hypot(1.2,.83,1.3))<1e-8);
+}
+
+try{
+  await page.goto(process.env.FLYDUCK_URL??'http://localhost:4179/?low');
+  await page.waitForFunction(()=>window.flyduck?.ready||window.flyduck?.error,null,{timeout:60000});
+  assert.equal((await snap()).error,null);
+  await page.waitForFunction(()=>window.flyduck.head?.frames>0);
+  const initial=(await snap()).head;
+  await page.waitForFunction(t=>window.flyduck.head.animationTime>t+1,initial.animationTime);
+  report.moving=(await snap()).head;
+  assert.equal(report.moving.autoRotate,true);
+  assert.notDeepEqual(report.moving.cameraPosition,initial.cameraPosition);
+  assert.notDeepEqual(report.moving.wingAngles,initial.wingAngles);
+  assert.notDeepEqual(report.moving.legAngles,initial.legAngles);
+  assert.equal(report.moving.ceilingAnchors.length,4);
+  assert.ok(report.moving.ceilingAnchors.every(p=>p[1]>.4&&p[1]<.55));
+  await page.locator('#toggle').click();
+  await page.waitForFunction(()=>window.flyduck.head.autoRotate===false);
+  const frozen=(await snap()).head;
+  await page.waitForTimeout(1100);
+  report.paused=(await snap()).head;
+  assert.equal(report.paused.animationTime,frozen.animationTime);
+  assert.deepEqual(report.paused.cameraPosition,frozen.cameraPosition);
+  assert.deepEqual(report.paused.wingAngles,frozen.wingAngles);
+  const head=await page.locator('#head-view').boundingBox();
+  await page.mouse.move(head.x+head.width/2,head.y+head.height/2);
+  await page.mouse.down();await page.mouse.move(head.x+head.width/2+35,head.y+head.height/2+10,{steps:5});await page.mouse.up();
+  await page.waitForFunction(prev=>window.flyduck.head.cameraPosition.some((v,i)=>Math.abs(v-prev[i])>.01),frozen.cameraPosition);
+  console.log('PASS: ceiling mounts, default rotation, wing/leg motion, pause and manual orbit');
+  await page.emulateMedia({reducedMotion:'reduce'});
+  await page.locator('#toggle').click();await page.waitForTimeout(1100);
+  const reduced=(await snap()).head;await page.waitForTimeout(1100);
+  assert.equal((await snap()).head.autoRotate,false);
+  assert.equal((await snap()).head.animationTime,reduced.animationTime);
+  assert.deepEqual((await snap()).head.cameraPosition,reduced.cameraPosition);
+  await page.locator('#toggle').click();await page.emulateMedia({reducedMotion:'no-preference'});
+  // The main camera follows a real turn; orbit input cannot break that alignment.
+  await page.locator('#reset').click();await page.waitForFunction(()=>window.flyduck.state.steps===0);
+  await page.locator('#scent-left').click();await page.locator('#toggle').click();
+  await page.waitForFunction(()=>Math.abs(window.flyduck.state.yaw)>.3||window.flyduck.state.fallen,null,{timeout:60000});
+  assert.equal((await snap()).state.fallen,false);checkFollowing(await snap());
+  await page.locator('#toggle').click();await page.waitForTimeout(700);
+  report.following=await snap();checkFollowing(report.following);
+  const arena=await page.locator('#world > canvas').boundingBox();
+  const center={x:arena.x+arena.width/2,y:arena.y+arena.height*.6};
+  await page.mouse.move(center.x,center.y);await page.mouse.wheel(0,-300);
+  await page.waitForFunction(d=>window.flyduck.camera.distance<d-.03,report.following.camera.distance);
+  report.zoomed=(await snap()).camera;checkFollowing(await snap());
+  const beforeDrag=await snap();
+  await page.mouse.down();await page.mouse.move(center.x+65,center.y+20,{steps:5});await page.mouse.up();await page.waitForTimeout(700);
+  const afterDrag=await snap();checkFollowing(afterDrag);
+  assert.deepEqual(afterDrag.food,beforeDrag.food);
+  afterDrag.camera.position.forEach((v,i)=>assert.ok(Math.abs(v-beforeDrag.camera.position[i])<1e-8));
+  await page.mouse.move(center.x,center.y);await page.mouse.wheel(0,300);
+  await page.waitForFunction(d=>window.flyduck.camera.distance>d+.03,report.zoomed.distance);
+  const beforePinch=await snap(),cdp=await page.context().newCDPSession(page);
+  await cdp.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x:center.x-25,y:center.y,id:1},{x:center.x+25,y:center.y,id:2}]});
+  await cdp.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x:center.x-50,y:center.y,id:1},{x:center.x+50,y:center.y,id:2}]});
+  await cdp.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});
+  await page.waitForFunction(d=>window.flyduck.camera.distance<d-.03,beforePinch.camera.distance);
+  report.pinched=await snap();checkFollowing(report.pinched);assert.deepEqual(report.pinched.food,beforePinch.food);
+  await cdp.detach();
+  console.log('PASS: rear following through a real turn, fixed angle, wheel/pinch zoom and gesture-safe banana placement');
+  await page.locator('#reset').click();await page.waitForFunction(()=>window.flyduck.state.steps===0);
+  await page.waitForFunction(()=>Math.abs(window.flyduck.camera.distance-Math.hypot(1.2,.83,1.3))<1e-8);
+
+  await page.waitForTimeout(1000);
+  // Place fruit through the same floor click users use, just beyond pickup range.
+  const world=await page.locator('#world > canvas').boundingBox();
+  const camera=new THREE.PerspectiveCamera(38,world.width/world.height,.01,50);
+  const view=(await snap()).camera;camera.position.set(...view.position);camera.lookAt(...view.target);camera.updateMatrixWorld();
+  const point=new THREE.Vector3(.25,0,0).project(camera);
+  await page.mouse.click(world.x+(point.x+1)*world.width/2,world.y+(1-point.y)*world.height/2);
+  report.placed=(await snap()).food;
+  assert.ok(Math.abs(report.placed.x-.25)<.01&&Math.abs(report.placed.y)<.01);
+  await page.locator('#toggle').click();
+  await page.waitForFunction(()=>window.flyduck.food.collected>=1||window.flyduck.state.fallen,null,{timeout:90000});
+  assert.equal((await snap()).state.fallen,false);
+  // Freeze during the gap to verify the old source really disappears and its odor clears.
+  await page.locator('#toggle').click();report.collected=await snap();
+  assert.equal(report.collected.food.collected,1);
+  assert.equal(report.collected.food.visible,false);
+  assert.equal(report.collected.food.respawning,true);
+  assert.equal(report.collected.scent,null);
+  assert.equal(report.collected.sensory.olfactory_left+report.collected.sensory.olfactory_right,0);
+  await page.waitForTimeout(1000);
+  assert.equal((await snap()).food.visible,false);
+  await page.locator('#toggle').click();
+  await page.waitForFunction(()=>window.flyduck.food.visible&&window.flyduck.food.collected===1,null,{timeout:15000});
+  await page.locator('#toggle').click();report.spawned=await snap();
+  assert.ok(Math.hypot(report.spawned.food.x-report.placed.x,report.spawned.food.y-report.placed.y)>.45);
+  assert.ok(Math.abs(report.spawned.food.x)<=1.65&&Math.abs(report.spawned.food.y)<=1.65);
+  assert.ok(report.spawned.sensory.olfactory_left+report.spawned.sensory.olfactory_right>0);
+  console.log('PASS: physical banana approach, collection, scent clearing, paused respawn and fresh scent');
+  await page.setViewportSize({width:1440,height:1300});await page.waitForTimeout(1200);
+  await page.screenshot({path:`${output}/food-respawn.png`,fullPage:true});
+  assert.deepEqual(errors,[]);report.passed=true;
+}catch(e){report.failure=e.message;report.current=await snap().catch(()=>null);throw e;}
+finally{fs.writeFileSync(`${output}/food-head-check.json`,JSON.stringify(report,null,2));await browser.close();}

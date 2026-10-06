@@ -1,0 +1,15 @@
+{
+ "name": "MaleCNS v1.0",
+ "sex": "male",
+ "neurons": 166700,
+ "edges": 2753975,
+ "synapses_kept": 67290024,
+ "edge_threshold": 10,
+ "source": "https://male-cns.janelia.org/download/",
+ "paper": "https://doi.org/10.1016/j.cell.2026.08.015",
+ "license": "CC-BY 4.0",
+ "side_rule": "somaSide > rootSide > entryNerve > soma x vs midline",
+ "sign_rule": "consensus_nt gaba negative, others positive (same as FlyWire graph)",
+ "positions_rule": "soma (8nm voxel x8 -> nm); missing -> mean of synaptic partners soma; else global mean",
+ "missing_soma": 27038
+}

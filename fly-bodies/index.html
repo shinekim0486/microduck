@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#0b0e14">
+  <title>인공지능 공부하기</title>
+  <meta name="description" content="2026년 공개된 수컷 초파리 뇌 배선(뉴런 166,700개)이 브라우저 안에서 발화하며 진짜 물리 엔진 속 유니트리 로봇 개를 조종합니다. 걷기는 공개 강화학습 정책, 방향은 초파리 뇌. Physical AI 실험실.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Ctext y='32' font-size='32'%3E🐕%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+</head>
+<body>
+<main>
+<p class="kicker">PHYSICAL AI 실험실 · 2026 수컷 초파리 뇌 지도 × 진짜 물리 엔진 × 공개 강화학습 정책</p>
+<h1>인공지능 <em>공부하기.</em></h1>
+<p class="lede">초파리 뇌 배선 하나가 여러 로봇을 조종합니다. 위 탭에서 몸을 바꿔도 뇌는 그대로입니다. 몸은 브라우저 안 물리 엔진(MuJoCo)이 계산하고, 걸음은 각 로봇이 강화학습으로 배운 정책이 맡고, <b>어디로 갈지는 초파리 뇌가 정합니다.</b> 바닥을 눌러 바나나를 놓으세요. 이 뇌는 학습하지 않습니다.</p>
+<nav class="tabs" aria-label="몸 선택">
+ <button class="tab" data-body="go1" aria-pressed="true">🐕 유니트리 Go1 로봇 개 <small>물리 + 강화학습 정책 · 관절 12</small></button>
+ <button class="tab" data-body="duck" aria-pressed="false">🦆 마이크로덕 <small>물리 + 강화학습 정책 · 관절 14</small></button>
+ <button class="tab" data-body="g1" aria-pressed="false">🤖 유니트리 G1 휴머노이드 <small>물리 + 강화학습 정책 · 관절 29 · 20MB</small></button>
+ <button class="tab" data-body="t1" aria-pressed="false">🤖 부스터 T1 휴머노이드 <small>물리 + 강화학습 정책 · 관절 23 · 8MB</small></button>
+ <button class="tab" data-body="bh" aria-pressed="false">🤖 버클리 휴머노이드 <small>물리 + 강화학습 정책 · 관절 12 · 27MB</small></button>
+ <button class="tab" data-body="company" aria-pressed="false">🏢 AI 네이티브 회사 <small>회사 시뮬레이터 · 두뇌가 가격·광고·발주 결정</small></button>
+ <a class="tab" href="https://wonseokjayjung-fly-walk.static.hf.space/" target="_blank" rel="noopener">🪰 2D 초파리 <small>물리 없음 · 가벼움 · 별도 페이지</small></a>
+</nav>
+<p class="bodyinfo" id="bodyInfo"></p>
+<nav class="tabs envs" aria-label="환경 선택"><span class="label">환경</span><button class="tab mini" data-env="flat" aria-pressed="true">평지</button><button class="tab mini" data-env="boxes" aria-pressed="false">장애물 상자</button><button class="tab mini" data-env="corridor" aria-pressed="false">벽 통로</button><button class="tab mini" data-env="slope" aria-pressed="false">경사 10°</button><button class="tab mini" data-env="stairs" aria-pressed="false">계단 5cm×3</button></nav>
+<p class="bodyinfo" id="envNote"></p>
+<nav class="tabs brains" aria-label="두뇌 선택"><span class="label">두뇌</span><button class="tab mini" data-brain="fly" aria-pressed="true">🪰 초파리 뇌 (복사)</button><button class="tab mini" data-brain="rule" aria-pressed="false">📏 규칙 두뇌 (5줄)</button><button class="tab mini" data-brain="random" aria-pressed="false">🎲 무작위</button><button class="tab mini" data-brain="custom" aria-pressed="false">✍️ 내 두뇌 (코드)</button></nav>
+<p class="bodyinfo" id="brainNote">2026 수컷 초파리 배선 166,700개를 물통 모델로. 학습 없음. 번역식은 사람이 정함.</p>
+<div id="customBox" class="custombox" hidden><textarea id="customCode" spellcheck="false" rows="12"></textarea><div class="row"><button id="customApply" class="primary">이 코드로 두뇌 끼우기</button><span class="hint">여러분 브라우저 안에서만 실행됩니다. 오류가 나면 명령은 0이 됩니다.</span></div></div>
+<p class="bodyinfo" id="brainMsg"></p>
+<div class="duo">
+ <section class="panel" aria-label="3D 경기장">
+  <div class="panel-top"><b id="bodyStat">로봇</b><span>바닥 클릭 · 드래그 회전 · 스크롤 확대</span></div>
+  <div id="world"></div>
+  <div class="status"><i id="dot"></i><span id="statusText">준비 중</span></div>
+  <div class="count" id="count"></div>
+  <div class="hint" id="coHint" hidden><b>회사 마을 (시뮬레이터 상태를 그린 그림)</b>상자 = 재고 · 노란 로봇 = 실무 에이전트 · 손님 = 수요 · 배송차 = 판매 · 전광판 = 광고 · 동전 = 현금 · 별 = 평판</div>
+  <div class="hint" id="sceneHint"><b>바닥을 눌러 바나나를 놓으세요</b>노란 점선이 로봇의 발자취입니다</div>
+ </section>
+ <section class="panel" aria-label="실시간 뇌 활동">
+  <div class="panel-top"><b id="brainTitle">초파리 뇌 · 실시간 발화</b><span id="brainStat">내려받는 중</span></div>
+  <div id="brain"></div><div id="chartHost" class="charthost" hidden></div>
+  <div class="legend" id="legendBox"><span><i style="background:#ffb020"></i>후각 뉴런</span><span><i style="background:#ffd60a"></i>촉각엽 투사뉴런</span><span><i style="background:#ff7a3d"></i>하강뉴런</span><span><i style="background:#fff176"></i>척수 운동뉴런</span><span><i style="background:#6ba2a1"></i>시각엽</span><span><i style="background:#8eae87"></i>중추뇌</span></div>
+ </section>
+</div>
+<div id="loading"><strong>초파리 뇌와 로봇을 내려받는 중…</strong><progress id="prog" max="100" value="0"></progress><small id="progText">뇌 배선 13MB · 좌표 2MB · 로봇 개 10MB · 걷기 정책 0.8MB · 물리 엔진 10MB</small><small>전부 이 기기 안에서 돌아갑니다. 서버도 계정도 없습니다.</small></div>
+<div class="flow">
+ <div><small>냄새 입력 (좌·우)</small><b id="fIn">0.00 · 0.00</b><i>인공 더듬이 후각</i></div>
+ <div><small>더듬이 촉각 (좌·우)</small><b id="fTouch">0.00 · 0.00</b><i>벽·상자 가까우면 기계감각 뉴런</i></div>
+ <div><small>촉각엽 투사뉴런</small><b id="fAL">0.0% · 0.0%</b><i>좌우 차이 → 회전</i></div>
+ <div><small>하강뉴런</small><b id="fDN">0.00%</b><i>발화율 → 전진</i></div>
+ <div><small>척수 운동뉴런 (초파리)</small><b id="fMot">0.00 · 0.00%</b><i>표시만, 로봇 관절엔 미연결</i></div>
+ <div><small>로봇 명령</small><b id="fCmd">0.00 m/s · 0.00 rad/s</b><i>초파리 뇌 → 로봇 정책 입력</i></div>
+ <div><small>이동 거리 · 정책 호출 · 발화</small><b><span id="fDist">0.00 m</span></b><i><span id="fPol">0</span>회 · 틱당 <span id="fSpk">0</span></i></div>
+</div>
+<div class="jointbox"><span class="label" id="jointLabel">로봇 관절</span><div id="joints"></div></div>
+<div class="controls"><span class="label">실험</span>
+ <button data-scent="1">바나나 왼쪽 ↖</button><button data-scent="-1">바나나 오른쪽 ↗</button><button id="clear">바나나 치우기</button>
+ <button data-antenna="normal" aria-pressed="true">더듬이 정상</button><button data-antenna="noLeft" aria-pressed="false">왼쪽 더듬이 제거</button><button data-antenna="swap" aria-pressed="false">좌우 바꿔 끼우기</button>
+ <button id="cut" aria-pressed="false">시냅스 끄기</button><button id="follow" aria-pressed="true">카메라 따라가기</button><button id="pause">일시정지</button><button id="reset">리셋</button>
+</div>
+<section class="evalbox" aria-label="두뇌 성적표"><div class="evalhead"><div><div class="panel-label">두뇌 성적표 — 지금 두뇌 × 지금 몸 × 환경 5개</div><p class="hint">환경마다 같은 시간 동안 바나나 몇 개를 먹고 몇 번 넘어지는지 셉니다. 두뇌를 바꿔 다시 돌리면 같은 몸에서 두뇌끼리 비교가 됩니다. 이게 "두뇌 판매"의 채점표입니다.</p></div><div class="evalctl"><label>환경당 <input id="evalSecs" type="number" min="10" max="120" step="5" value="30"> 초</label><button id="evalBtn" class="primary">▶ 채점 시작</button><button id="evalStop" hidden>멈춤</button><button id="evalCopy">결과 복사</button></div></div><table class="evaltable"><thead><tr><th id="evalH1">환경</th><th id="evalH2">바나나</th><th id="evalH3">넘어짐</th><th id="evalH4">이동</th></tr></thead><tbody id="evalRows"></tbody></table><p class="hint" id="evalMsg"></p></section>
+<div class="honest"><b>정직하게.</b> 이 페이지의 "두뇌"는 냄새와 촉각만 받는 아주 작은 두뇌입니다. 실제 로봇 두뇌 상품은 카메라·라이다 같은 인식이 들어가야 합니다. 여기서 보여주는 건 인터페이스(감각 → 두뇌 → 속도 명령 → 걷기 정책)와 채점 방식입니다. 초파리 뇌를 넣은 이유는 계산 효율이 아니라 학습 비용입니다. 냄새를 방향으로 바꾸는 항법을 새로 학습시키지 않고 자연이 만든 배선을 재사용했습니다(항법 학습 데이터 0). 로봇의 걸음과 균형은 초파리 뇌가 아니라 <b>각 로봇이 강화학습으로 배운 공개 정책</b>(로봇 개·휴머노이드는 MuJoCo Playground, 마이크로덕은 Pollen Robotics)이 만듭니다. 초파리 뇌는 촉각엽 좌우 발화 차이와 하강뉴런 발화율을 "전진·회전" 두 숫자로 번역한 값만 정책에 넘기고, 그 번역식은 사람이 정했습니다. 뇌 배선은 진짜(Cell 2026, CC-BY, 시냅스 10개 이상만)이고 물통 모델로 계산하며 학습하지 않습니다. 초파리의 척수 운동뉴런 발화는 표시만 하고 로봇 관절에는 연결하지 않았습니다. 초파리 다리와 로봇 다리는 대응하지 않기 때문입니다. 환경 상자·벽과의 충돌은 발(정책이 학습된 모델 그대로)과 몸통 껍질만 계산합니다. 무릎·팔은 벽을 지나갈 수 있습니다.</div>
+<details><summary>어떻게 돌아가나</summary>
+<p><b>1. 뇌.</b> 수컷 초파리 중추신경계 배선도(뉴런 166,700개, 시냅스 10개 이상 연결 2,753,975개)를 물통 모델로 0.1초마다 10틱 돌립니다. 오른쪽 그림의 점 하나가 뉴런 하나, 실제 세포체 좌표입니다.</p>
+<p><b>2. 감각.</b> 로봇 위치와 바나나 위치로 좌우 후각 뉴런에 인공 자극을 넣습니다.</p>
+<p><b>3. 번역.</b> 촉각엽 투사뉴런 좌우 차이 → 회전 속도(최대 1.5 rad/s), 하강뉴런 발화율 → 전진 속도(최대 0.9 m/s). microfly 데모의 식을 로봇 단위로 늘렸습니다.</p>
+<p><b>4. 몸.</b> 유니트리 Go1 모델(MuJoCo Menagerie, BSD-3)을 브라우저 MuJoCo(4ms 물리 스텝)로 계산합니다. 0.02초마다 관측 48개(속도 3, 각속도 3, 중력 방향 3, 관절 각도 12, 관절 속도 12, 직전 행동 12, 명령 3)를 만들어 Playground의 ONNX 정책에 넣고, 나온 12개 값을 관절 목표로 씁니다. 학습 코드와 정책은 Google DeepMind가 Apache-2.0으로 공개한 것입니다.</p>
+<p><b>5. 환경.</b> 장애물·벽·경사·계단은 같은 물리 엔진의 정적 상자입니다. 초파리 뇌는 눈으로 장애물을 보지 않고 더듬이 기계감각 뉴런으로만 느낍니다. 경사와 계단은 "평지에서 배운 정책이 어디까지 버티나"를 보는 실험이며, 넘어지는 것도 결과입니다.</p>
+<p><b>6. 회사도 몸이다.</b> 여섯 번째 탭은 로봇 대신 회사 시뮬레이터입니다. 수요는 가격·광고·평판·계절에 따라 움직이고, 두뇌가 매일 가격·광고·발주를 정하고, 보상은 현금입니다. 환경은 시장 시나리오 다섯 개(평온, 경쟁사 등장, 원가 급등, 수요 급증, 불황)로 바뀝니다. 구조가 로봇과 같습니다. 몸 + 실무 + 두뇌 + 환경 + 채점. 이 시뮬레이터는 장난감 수준이며, 진짜 회사 두뇌를 만들려면 시뮬레이터의 현실성이 관건입니다(로봇의 Sim2Real과 같은 문제).</p>
+<p><b>7. 같은 구조.</b> 마이크로덕 판과 완전히 같은 구조입니다. 뇌와 번역식은 그대로, 몸과 정책만 바꿨습니다. 그래서 "한 뇌, 여러 몸"입니다.</p>
+</details>
+<footer><p class="mission">AI가 만드는 기회를 소수가 독점하지 않도록.</p><p>뇌 데이터: MaleCNS v1.0, Berg 외, <i>Cell</i> (2026), HHMI Janelia · Univ. of Cambridge · Google Research, CC-BY 4.0 · 로봇 모델: MuJoCo Menagerie unitree_go1·unitree_g1 (Unitree, BSD-3), berkeley_humanoid (Hybrid Robotics, BSD-3), booster_t1 (Booster Robotics, Apache-2.0), MicroDuck (Pollen Robotics, Apache-2.0) · 걷기 정책: MuJoCo Playground go1/g1/bh/t1_policy.onnx (Google DeepMind, Apache-2.0), Pollen BEST_alpha_walking.onnx (Apache-2.0) · 물리: MuJoCo (Apache-2.0) · 물통 모델·번역식·뇌 뷰어: microfly(Apache-2.0)를 바탕으로 함 · 수컷 뇌 변환 (Apache-2.0) · <b><a href="https://wonseokjayjung-fly-source.static.hf.space/">소스 코드 내려받기 ↗</a></b> · 유튜브 <a href="https://www.youtube.com/@CONNECT-AI-LAB">@CONNECT-AI-LAB</a> · 무료 아카이브 <a href="https://www.aicitybuilders.com/guide">aicitybuilders.com/guide</a></p></footer>
+</main>
+<script type="module" src="/src/main.js"></script>
+</body>
+</html>

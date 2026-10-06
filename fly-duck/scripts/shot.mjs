@@ -1,0 +1,13 @@
+import {chromium} from '@playwright/test';
+const browser=await chromium.launch({headless:true,executablePath:process.env.CHROMIUM_PATH,args:['--no-sandbox','--enable-unsafe-swiftshader']});
+const page=await browser.newPage({viewport:{width:1440,height:1000}});const errors=[];page.on('pageerror',e=>errors.push(e.message));
+await page.goto(process.env.FLYDUCK_URL);
+await page.waitForFunction(()=>window.flyduck?.ready||window.flyduck?.error,null,{timeout:120000});
+await page.locator('#guide-banana').click();await page.waitForTimeout(7000);
+await page.screenshot({path:'shots/desktop.png',fullPage:true});
+await page.locator('#ch-start').click();await page.waitForTimeout(1500);
+console.log('flow',await page.evaluate(()=>['f-in-l','f-alpn-l','f-dn','f-fwd','f-turn','f-dist','ch-time'].map(i=>i+'='+document.getElementById(i).textContent).join(' ')));
+await page.setViewportSize({width:390,height:844});await page.waitForTimeout(800);
+await page.screenshot({path:'shots/mobile.png',fullPage:true});
+console.log('overflow',await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),'errors',errors);
+await browser.close();

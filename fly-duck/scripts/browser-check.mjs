@@ -1,0 +1,48 @@
+import {chromium} from '@playwright/test';
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+const url=process.env.FLYDUCK_URL??'http://localhost:4179/?low';
+const browser=await chromium.launch({headless:true,executablePath:process.env.CHROMIUM_PATH??'/opt/pw-browsers/chromium-1243/chrome-linux64/chrome',args:['--no-sandbox','--enable-unsafe-swiftshader']});
+const output=process.env.FLYDUCK_EVIDENCE??'test-results';fs.mkdirSync(output,{recursive:true});
+const page=await browser.newPage({viewport:{width:390,height:844}}),errors=[];page.on('pageerror',e=>errors.push(e.message));
+let report={};const snap=()=>page.evaluate(()=>structuredClone(window.flyduck));
+const progress=setInterval(async()=>{const s=await snap().catch(()=>null);if(s)console.log('Progress',s.mode,s.state?.steps,s.state?.distance?.toFixed(3));},30000);
+try{
+  await page.goto(url);await page.waitForFunction(()=>window.flyduck?.ready||window.flyduck?.error,null,{timeout:60000});
+  assert.equal((await snap()).error,null);assert.equal((await snap()).download.percent,100);assert.equal((await snap()).download.completed,10);assert.equal((await snap()).food.type,'overripe banana');await page.waitForFunction(()=>window.flyduck.head?.frames>0);assert.equal((await snap()).head.electrodes,4);console.log('Brain, anatomy and physics loaded');
+  await page.waitForFunction(()=>window.flyduck.anatomy?.sequence>5);assert.equal((await snap()).anatomy.neurons,139255);assert.ok((await snap()).anatomy.active>0);
+  await page.locator('#scent-left').click();await page.waitForFunction(()=>window.flyduck.activity?.command.turn>.3,null,{timeout:20000});
+  report.scentLeft=await snap();assert.ok(report.scentLeft.sensory.olfactory_left>report.scentLeft.sensory.olfactory_right);
+  await page.locator('#scent-right').click();await page.waitForFunction(()=>window.flyduck.activity?.command.turn<-.3,null,{timeout:20000});
+  report.scentRight=await snap();assert.ok(report.scentRight.sensory.olfactory_right>report.scentRight.sensory.olfactory_left);
+  await page.locator('#clear-scent').click();await page.waitForFunction(()=>window.flyduck.activity?.command.forward===0&&window.flyduck.activity.scentLeft+window.flyduck.activity.scentRight===0,null,{timeout:20000});
+  report.clear=await snap();console.log('PASS: left/right scent reverses neural steering; clear stops drive');
+  await page.locator('#reset').click();await page.locator('#scent-left').click();
+  await page.waitForFunction(()=>(window.flyduck.state?.distance>.22&&Math.hypot(window.flyduck.state.x,window.flyduck.state.y)>.1)||window.flyduck.state?.fallen||window.flyduck.error,null,{timeout:180000});
+  report.walk=await snap();assert.equal(report.walk.state.fallen,false);assert.ok(report.walk.state.distance>.2);assert.ok(Math.hypot(report.walk.state.x,report.walk.state.y)>.1);console.log('PASS: upright walk',report.walk.state.steps,report.walk.state.distance);
+  // Direct mode is temporarily hidden in the UI; keep its retained code covered.
+  await page.locator('#mode-direct').evaluate(button=>button.click());await page.waitForFunction(()=>window.flyduck.state?.directSteps>50,null,{timeout:60000});
+  report.direct=await snap();assert.equal(report.direct.state.policyCalls,0);assert.ok(report.direct.state.appliedMotors.some(v=>Math.abs(v)>.02));assert.ok(report.direct.state.joints.every(Number.isFinite));
+  const before=report.direct.state.targets;await page.waitForFunction(prev=>window.flyduck.state.targets.some((v,i)=>Math.abs(v-prev[i])>.01),before);
+  await page.locator('#connected').uncheck();await page.waitForFunction(()=>window.flyduck.command.enabled===false);assert.equal((await snap()).state.policyCalls,0);
+  await page.locator('#connected').check();console.log('PASS: direct motor targets move; policy invocation count remains zero');
+  await page.locator('#toggle').click();await page.waitForTimeout(1000);const frozen=(await snap()).state.steps;await page.waitForTimeout(600);assert.equal((await snap()).state.steps,frozen);
+  await page.locator('#reset').click();await page.waitForFunction(()=>window.flyduck.state.steps===0);await page.locator('#toggle').click();
+  await page.locator('#about').click();await page.locator('#cut').check();await page.locator('#close-about').click();
+  await page.waitForFunction(()=>window.flyduck.activity?.tick>=40&&window.flyduck.activity.left===0&&window.flyduck.activity.right===0,null,{timeout:20000});
+  report.ablation=await snap();assert.ok(report.ablation.activity.spikes>0);assert.ok(report.ablation.activity.motors.every(v=>v===0));
+  await page.locator('#about').click();await page.locator('#cut').uncheck();await page.locator('#close-about').click();
+  await page.locator('#reset').click();await page.locator('#scent-right').click();await page.waitForFunction(()=>window.flyduck.activity?.tick>80);
+  await page.locator('#toggle').click();
+  await page.setViewportSize({width:1440,height:1050});await page.waitForTimeout(500);await page.screenshot({path:`${output}/desktop.png`,fullPage:true});
+  const full=(await snap()).anatomy.cut;await page.locator('#brain-expand').click();await page.locator('#slice').fill('50');await page.locator('#slice').dispatchEvent('input');
+  await page.waitForFunction(v=>window.flyduck.anatomy.cut<v,full);await page.screenshot({path:`${output}/brain-slice.png`});
+  assert.equal(await page.locator('#brain-dialog').evaluate(e=>e.open),true);await page.locator('#shell').uncheck();await page.locator('#shell').check();await page.locator('#brain-reset').click();await page.locator('#brain-close').click();
+  await page.locator('.brain-panel #brain-world').waitFor();assert.equal(await page.locator('.brain-panel #brain-world').count(),1);await page.locator('#slice').fill('100');await page.locator('#slice').dispatchEvent('input');
+  await page.setViewportSize({width:390,height:844});await page.waitForTimeout(500);
+  assert.ok(await page.locator('#world').evaluate(e=>e.clientHeight)>300);assert.ok(await page.locator('#brain-world').evaluate(e=>e.clientHeight)>300);
+  await page.screenshot({path:`${output}/mobile.png`,fullPage:true});assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
+  await page.locator('#mode-walk').evaluate(button=>button.click());assert.equal((await snap()).mode,'walk');
+  assert.deepEqual(errors,[]);report.passed=true;console.log('PASS: pause, reset, ablation, anatomical slicing, expand, mobile layout');
+}catch(e){report.failure=e.message;report.current=await snap().catch(()=>null);console.log('FAIL',e.message,JSON.stringify(report.current));await page.screenshot({path:`${output}/failure.png`,fullPage:true}).catch(()=>{});throw e;
+}finally{clearInterval(progress);fs.writeFileSync(`${output}/browser-check.json`,JSON.stringify(report,null,2));await browser.close();}

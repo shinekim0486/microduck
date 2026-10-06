@@ -1,0 +1,76 @@
+{
+  "brain_repository": "https://github.com/snedea/flybrain",
+  "brain_commit": "9191824d17871b7851645782d53d23f213ddb938",
+  "robot_repository": "https://huggingface.co/spaces/pollen-robotics/microduck-simulator",
+  "robot_commit": "023172c8a7d629b5258d90364c13bafe013abbfa",
+  "files": {
+    "public/brain/connectome.bin.gz": "fbf8d440ca1207c7573e1acdd2366f9d0beb9b533c1710f21681264f81b1cc49",
+    "public/brain/channels.json": "faf1490b965da1e69a5e8d0783882326c5a0b1e43571555cb2ab48f6757f5df7",
+    "public/robot/mjlab/kinematics.json": "099c64fa03280514eed881accf563061a640eb7800d5ce15be5af92d1f63d38b",
+    "public/robot/mjlab/robot_allcollisions.xml": "7a6fdf437f5a80c7348ad801f43f906b997a834389cb70cca5e1e8517ba38044",
+    "public/robot/mjlab/microduck.glb": "ad0b8d1c886a857fd09d337be11e731f4ac72bf099b0af63081031f97ed6eadb",
+    "public/policies/BEST_alpha_walking.onnx": "e36332d383997d51401897734cd3e79cf5038406feddb18b4d57ecfb141daa6c",
+    "public/brain/anatomy/positions.bin": "5adaa5c065584d05eb8775ffc92d908931a3ae339723f0eeaec07c18a70aa324",
+    "public/brain/anatomy/tissue.ply": "b0e16ef5e8ec5b450b52d79a866322ad30c0bc44651226eb291f2377f53456ab",
+    "public/brain/anatomy/tissue-source.md": "10cca1bdc24c184182d112687a20360cbd9c9c126acb5b03827b94eb21ea0fbd",
+    "licenses/navis-flybrains-GPL-3.0.txt": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986"
+  },
+  "channel_counts": {
+    "mechanosensory_left": 1370,
+    "descending_left": 647,
+    "visual_left": 5892,
+    "olfactory_left": 1117,
+    "olfactory_right": 1134,
+    "mechanosensory_right": 1304,
+    "descending_right": 650,
+    "visual_right": 5458,
+    "CX_left": 1439,
+    "CX_right": 1439,
+    "LHLN_right": 261,
+    "ALPN_right": 344,
+    "LHCENT_left": 21,
+    "ALPN_left": 341,
+    "LHLN_left": 256,
+    "LHCENT_right": 21
+  },
+  "anatomy": {
+    "repository": "https://github.com/navis-org/navis-flybrains",
+    "commit": "273333c8d8bf5adeebebd274e554621462e388bd",
+    "mesh": "flybrains/meshes/FLYWIRE_whole_brain.ply",
+    "coordinates_source": "https://github.com/snedea/flybrain/blob/9191824d17871b7851645782d53d23f213ddb938/data/coordinates.csv.gz",
+    "coordinate_rule": "First supplied point for each root ID, joined in graph order; raw nanometers; no synthetic positions",
+    "neuron_positions": 139255
+  },
+  "male_cns": {
+    "source": "https://male-cns.janelia.org/download/",
+    "release": "MaleCNS v1.0",
+    "license": "CC-BY 4.0",
+    "paper": "https://doi.org/10.1016/j.cell.2026.08.015",
+    "source_files": {
+      "annotations": "https://storage.googleapis.com/flyem-male-cns/v1.0/connectome-data/flat-connectome/body-annotations-male-cns-v1.0-minconf-0.5.feather",
+      "neurotransmitters": "https://storage.googleapis.com/flyem-male-cns/v1.0/connectome-data/flat-connectome/body-neurotransmitters-male-cns-v1.0.feather",
+      "edges": "https://storage.googleapis.com/flyem-male-cns/v1.0/connectome-data/flat-connectome/connectome-weights-male-cns-v1.0-minconf-0.5.feather"
+    },
+    "built_files": {
+      "public/brain-male/connectome.bin.gz": "c132992033337db0bef35ae6a7ee55c6a37c9fab5633cc7ac0bf6097461b65b2",
+      "public/brain-male/channels.json": "9523504b8f0346129b9f8f74d7dc4d95f2cc60bd0ade5b8ae4a1139a2bbd0e83",
+      "public/brain-male/anatomy/positions.bin": "3264e8f65805d572eb201548acf20f355ea810f313fc06c72b066d53bed20cd6",
+      "public/brain-male/anatomy/tissue.ply": "cfd697388e91c9bddb30fa882d0255d2191a2990bd66ffd839bea8a40cb17e77"
+    },
+    "meta": {
+      "name": "MaleCNS v1.0",
+      "sex": "male",
+      "neurons": 166700,
+      "edges": 2753975,
+      "synapses_kept": 67290024,
+      "edge_threshold": 10,
+      "source": "https://male-cns.janelia.org/download/",
+      "paper": "https://doi.org/10.1016/j.cell.2026.08.015",
+      "license": "CC-BY 4.0",
+      "side_rule": "somaSide > rootSide > entryNerve > soma x vs midline",
+      "sign_rule": "consensus_nt gaba negative, others positive (same as FlyWire graph)",
+      "positions_rule": "soma (8nm voxel x8 -> nm); missing -> mean of synaptic partners soma; else global mean",
+      "missing_soma": 27038
+    }
+  }
+}
