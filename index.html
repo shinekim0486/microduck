@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>인공지능 공부하기 — 초파리 뇌 & 로봇 시뮬레이션</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+    * { font-family: 'Pretendard', sans-serif; }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen antialiased flex flex-col justify-between selection:bg-emerald-500 selection:text-white">
+
+  <!-- Header -->
+  <header class="border-b border-slate-800 bg-slate-900/60 backdrop-blur sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <span class="text-2xl">🧠</span>
+        <span class="font-extrabold text-lg tracking-tight text-white">인공지능 공부하기</span>
+        <span class="hidden sm:inline-block text-xs px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-medium">MaleCNS 2026</span>
+      </div>
+      <div class="flex items-center gap-3">
+        <a href="https://github.com/shinekim0486/microduck" target="_blank" rel="noopener" class="flex items-center gap-1.5 text-xs text-slate-300 hover:text-white px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 transition">
+          <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+          <span>GitHub</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <main class="max-w-6xl mx-auto px-4 py-12 flex-1">
+    <div class="text-center max-w-3xl mx-auto mb-12">
+      <h1 class="text-3xl sm:text-5xl font-extrabold text-white tracking-tight mb-4 leading-tight">
+        초파리 뇌로 로봇을 조종하기<br>
+        <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-400">인공지능 공부하기 포털</span>
+      </h1>
+      <p class="text-slate-400 text-sm sm:text-base leading-relaxed">
+        2026년 구글·자넬리아가 공개한 16만 뉴런 수컷 초파리 뇌신경망(MaleCNS)을 브라우저에서 직접 구동하고,
+        로봇 오리(MicroDuck), Unitree Go1 로봇 개, G1 휴머노이드 등 다양한 인공지능 로봇을 조종해보세요.
+      </p>
+    </div>
+
+    <!-- Cards Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+
+      <!-- 카드 1: 마이크로덕 3D & 뇌 비교 -->
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 hover:border-emerald-500/50 hover:shadow-xl hover:shadow-emerald-500/5 transition duration-200 flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between mb-4">
+            <span class="text-3xl">🦆</span>
+            <span class="text-xs font-semibold px-2.5 py-1 rounded-md bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">3D MuJoCo</span>
+          </div>
+          <h2 class="text-xl font-bold text-white mb-2">마이크로덕 3D 실험실</h2>
+          <p class="text-slate-400 text-xs sm:text-sm leading-relaxed mb-4">
+            초파리 뇌 신경망과 연동된 로봇 오리 시뮬레이션입니다. 더듬이 감각 자극, 특정 뇌 부위 절제, 시냅스 강도 조절 및 60초 바나나 챌린지를 체험할 수 있습니다.
+          </p>
+        </div>
+        <div class="pt-4 border-t border-slate-800/80 space-y-2">
+          <a href="./fly-duck/index.html" class="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-sm transition">
+            실험실 열기 ↗
+          </a>
+          <a href="./fly-duck/compare.html" class="w-full flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-medium text-xs transition">
+            암수 뇌 비교창 (compare.html) ↗
+          </a>
+        </div>
+      </div>
+
+      <!-- 카드 2: 한 뇌, 여러 몸 -->
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 hover:border-indigo-500/50 hover:shadow-xl hover:shadow-indigo-500/5 transition duration-200 flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between mb-4">
+            <span class="text-3xl">🐕</span>
+            <span class="text-xs font-semibold px-2.5 py-1 rounded-md bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">Physical AI</span>
+          </div>
+          <h2 class="text-xl font-bold text-white mb-2">한 뇌, 여러 몸</h2>
+          <p class="text-slate-400 text-xs sm:text-sm leading-relaxed mb-4">
+            같은 뇌로 유니트리 Go1 로봇 개(관절 12), G1 휴머노이드(관절 29), 마이크로덕, AI 회사 시뮬레이터 5개 환경을 교체하며 자율 제어하는 종합 실험실입니다.
+          </p>
+        </div>
+        <div class="pt-4 border-t border-slate-800/80">
+          <a href="./fly-bodies/index.html" class="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-sm transition">
+            로봇 시뮬레이터 열기 ↗
+          </a>
+        </div>
+      </div>
+
+      <!-- 카드 3: 2D 초파리 뇌 걷기 -->
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 hover:border-amber-500/50 hover:shadow-xl hover:shadow-amber-500/5 transition duration-200 flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between mb-4">
+            <span class="text-3xl">🪰</span>
+            <span class="text-xs font-semibold px-2.5 py-1 rounded-md bg-amber-500/10 text-amber-400 border border-amber-500/20">초경량 13MB</span>
+          </div>
+          <h2 class="text-xl font-bold text-white mb-2">2D 초파리 뇌 걷기</h2>
+          <p class="text-slate-400 text-xs sm:text-sm leading-relaxed mb-4">
+            설치 없이 브라우저에서 바로 열리는 초경량 2D 보행 시뮬레이터입니다. 실시간 3D 뇌 발화 뷰어와 함께 다리 운동 뉴런의 반응을 직관적으로 확인할 수 있습니다.
+          </p>
+        </div>
+        <div class="pt-4 border-t border-slate-800/80">
+          <a href="./fly-walk/index.html" class="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-sm transition">
+            2D 시뮬레이터 열기 ↗
+          </a>
+        </div>
+      </div>
+
+      <!-- 카드 4: 초파리 뇌지도 실습 노트북 -->
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 hover:border-sky-500/50 hover:shadow-xl hover:shadow-sky-500/5 transition duration-200 flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between mb-4">
+            <span class="text-3xl">📓</span>
+            <span class="text-xs font-semibold px-2.5 py-1 rounded-md bg-sky-500/10 text-sky-400 border border-sky-500/20">Google Colab &amp; Web</span>
+          </div>
+          <h2 class="text-xl font-bold text-white mb-2">초파리 뇌지도 실습</h2>
+          <p class="text-slate-400 text-xs sm:text-sm leading-relaxed mb-4">
+            구글 코랩 환경에서 16만 뉴런 표와 신경전달물질 데이터를 다운로드하고, 3D 뇌 시각화 및 물통(LIF) 모델 배선 코드를 직접 실행할 수 있습니다.
+          </p>
+        </div>
+        <div class="pt-4 border-t border-slate-800/80 space-y-2">
+          <a href="./notebook/index.html" class="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold text-sm transition">
+            웹에서 노트북 보기 ↗
+          </a>
+          <a href="https://colab.research.google.com/drive/11rNvjT1fJAw4eCybShEfT7Eb6hb6qTGb" target="_blank" rel="noopener" class="w-full flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-medium text-xs transition">
+            Google Colab에서 실행하기 ↗
+          </a>
+        </div>
+      </div>
+
+      <!-- 카드 5: 내 두뇌 모델 -->
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 hover:border-emerald-500/50 hover:shadow-xl transition duration-200 flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between mb-4">
+            <span class="text-3xl">🧬</span>
+            <span class="text-xs font-semibold px-2.5 py-1 rounded-md bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">Model Weights</span>
+          </div>
+          <h2 class="text-xl font-bold text-white mb-2">내 두뇌 신경망 모델</h2>
+          <p class="text-slate-400 text-xs sm:text-sm leading-relaxed mb-4">
+            시뮬레이터에서 저장된 두뇌 가중치 파일(<code>내두뇌.json</code>, <code>brain.json</code>)을 웹페이지에서 직접 내려받고 시뮬레이터에 적용할 수 있습니다.
+          </p>
+        </div>
+        <div class="pt-4 border-t border-slate-800/80">
+          <a href="./models/내두뇌.json" download class="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-sm transition">
+            내 두뇌(JSON) 내려받기 ⬇
+          </a>
+        </div>
+      </div>
+
+      <!-- 카드 6: GitHub 저장소 -->
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 hover:border-slate-500/50 hover:shadow-xl transition duration-200 flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between mb-4">
+            <span class="text-3xl">🐙</span>
+            <span class="text-xs font-semibold px-2.5 py-1 rounded-md bg-slate-700 text-slate-300">Open Source</span>
+          </div>
+          <h2 class="text-xl font-bold text-white mb-2">GitHub 오픈소스</h2>
+          <p class="text-slate-400 text-xs sm:text-sm leading-relaxed mb-4">
+            전체 프로젝트 소스 코드, MuJoCo 물리 엔진 설정, ONNX 강화학습 보행 정책 및 MaleCNS 변환 스크립트가 공개되어 있습니다.
+          </p>
+        </div>
+        <div class="pt-4 border-t border-slate-800/80">
+          <a href="https://github.com/shinekim0486/microduck" target="_blank" rel="noopener" class="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-sm transition">
+            shinekim0486/microduck ↗
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-slate-900 bg-slate-950 py-6 text-center text-xs text-slate-500">
+    <div class="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+      <span>© 2026 인공지능 공부하기 · GitHub: <a href="https://github.com/shinekim0486/microduck" target="_blank" class="text-slate-400 hover:underline">shinekim0486/microduck</a></span>
+      <span>기반 오픈소스: microfly, Pollen Robotics, MuJoCo Menagerie, MaleCNS</span>
+    </div>
+  </footer>
+
+</body>
+</html>
