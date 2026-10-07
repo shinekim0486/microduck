@@ -34,7 +34,7 @@
     <div class="text-center max-w-3xl mx-auto mb-12">
       <h1 class="text-3xl sm:text-5xl font-extrabold text-white tracking-tight mb-4 leading-tight">
         초파리 뇌로 로봇을 조종하기<br>
-        <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-400">인공지능 공부하기 실험실</span>
+        <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-400">인공지능 공부하기 포털</span>
       </h1>
       <p class="text-slate-400 text-sm sm:text-base leading-relaxed">
         2026년 구글·자넬리아가 공개한 16만 뉴런 수컷 초파리 뇌신경망(MaleCNS)을 브라우저에서 직접 구동하고,
@@ -105,57 +105,63 @@
         </div>
       </div>
 
-      <!-- 카드 4: 구글 코랩 실습 -->
+      <!-- 카드 4: 초파리 뇌지도 실습 노트북 -->
       <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 hover:border-sky-500/50 hover:shadow-xl hover:shadow-sky-500/5 transition duration-200 flex flex-col justify-between">
         <div>
           <div class="flex items-center justify-between mb-4">
             <span class="text-3xl">📓</span>
-            <span class="text-xs font-semibold px-2.5 py-1 rounded-md bg-sky-500/10 text-sky-400 border border-sky-500/20">Google Colab</span>
+            <span class="text-xs font-semibold px-2.5 py-1 rounded-md bg-sky-500/10 text-sky-400 border border-sky-500/20">Google Colab &amp; Web</span>
           </div>
-          <h2 class="text-xl font-bold text-white mb-2">코랩 실습 노트북</h2>
+          <h2 class="text-xl font-bold text-white mb-2">초파리 뇌지도 실습</h2>
           <p class="text-slate-400 text-xs sm:text-sm leading-relaxed mb-4">
-            구글 코랩 환경에서 16만 뉴런 표와 신경전달물질 데이터를 직접 다운로드받고, 3D 뇌 시각화 및 물통(LIF) 모델 배선 코드를 직접 실행해볼 수 있습니다.
+            구글 코랩 환경에서 16만 뉴런 표와 신경전달물질 데이터를 다운로드하고, 3D 뇌 시각화 및 물통(LIF) 모델 배선 코드를 직접 실행할 수 있습니다.
           </p>
         </div>
-        <div class="pt-4 border-t border-slate-800/80">
-          <a href="https://colab.research.google.com/drive/11rNvjT1fJAw4eCybShEfT7Eb6hb6qTGb" target="_blank" rel="noopener" class="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold text-sm transition">
-            Colab 노트북 바로가기 ↗
+        <div class="pt-4 border-t border-slate-800/80 space-y-2">
+          <a href="./notebook/index.html" class="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold text-sm transition">
+            웹에서 노트북 보기 ↗
+          </a>
+          <a href="https://colab.research.google.com/drive/11rNvjT1fJAw4eCybShEfT7Eb6hb6qTGb" target="_blank" rel="noopener" class="w-full flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-medium text-xs transition">
+            Google Colab에서 실행하기 ↗
           </a>
         </div>
       </div>
 
-      <!-- 카드 5: GitHub 저장소 -->
+      <!-- 카드 5: 내 두뇌 모델 -->
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 hover:border-emerald-500/50 hover:shadow-xl transition duration-200 flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between mb-4">
+            <span class="text-3xl">🧬</span>
+            <span class="text-xs font-semibold px-2.5 py-1 rounded-md bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">Model Weights</span>
+          </div>
+          <h2 class="text-xl font-bold text-white mb-2">내 두뇌 신경망 모델</h2>
+          <p class="text-slate-400 text-xs sm:text-sm leading-relaxed mb-4">
+            시뮬레이터에서 저장된 두뇌 가중치 파일(<code>내두뇌.json</code>, <code>brain.json</code>)을 웹페이지에서 직접 내려받고 시뮬레이터에 적용할 수 있습니다.
+          </p>
+        </div>
+        <div class="pt-4 border-t border-slate-800/80">
+          <a href="./models/내두뇌.json" download class="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-sm transition">
+            내 두뇌(JSON) 내려받기 ⬇
+          </a>
+        </div>
+      </div>
+
+      <!-- 카드 6: GitHub 저장소 -->
       <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 hover:border-slate-500/50 hover:shadow-xl transition duration-200 flex flex-col justify-between">
         <div>
           <div class="flex items-center justify-between mb-4">
             <span class="text-3xl">🐙</span>
             <span class="text-xs font-semibold px-2.5 py-1 rounded-md bg-slate-700 text-slate-300">Open Source</span>
           </div>
-          <h2 class="text-xl font-bold text-white mb-2">GitHub 오픈소스 저장소</h2>
+          <h2 class="text-xl font-bold text-white mb-2">GitHub 오픈소스</h2>
           <p class="text-slate-400 text-xs sm:text-sm leading-relaxed mb-4">
-            프로젝트 전체 소스 코드, 브라우저용 MuJoCo 및 ONNX 모델, MaleCNS 수컷 초파리 변환 스크립트, 두뇌 가중치 파일(<code>models/</code>)을 자유롭게 확인할 수 있습니다.
+            전체 프로젝트 소스 코드, MuJoCo 물리 엔진 설정, ONNX 강화학습 보행 정책 및 MaleCNS 변환 스크립트가 공개되어 있습니다.
           </p>
         </div>
         <div class="pt-4 border-t border-slate-800/80">
           <a href="https://github.com/shinekim0486/microduck" target="_blank" rel="noopener" class="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-sm transition">
             shinekim0486/microduck ↗
           </a>
-        </div>
-      </div>
-
-      <!-- 카드 6: 안내 -->
-      <div class="bg-slate-900/50 border border-dashed border-slate-800 rounded-2xl p-6 flex flex-col justify-between">
-        <div>
-          <span class="text-3xl mb-4 block">💡</span>
-          <h2 class="text-xl font-bold text-slate-200 mb-2">작동 특징</h2>
-          <ul class="text-slate-400 text-xs space-y-2 list-disc list-inside leading-relaxed">
-            <li>외부 서버 없이 브라우저 WebAssembly로 100% 로컬 계산</li>
-            <li>2026 수컷 초파리 166,700 뉴런 &amp; 2,753,975 시냅스 연결</li>
-            <li>보행 균형은 강화학습 정책이, 방향 제어는 초파리 뇌가 담당</li>
-          </ul>
-        </div>
-        <div class="pt-4 text-xs text-slate-500">
-          라이선스: Apache-2.0
         </div>
       </div>
 
