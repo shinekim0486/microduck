@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#0b0e14">
+<title>초파리 뇌 걷기</title>
+<meta name="description" content="2026년 9월 공개된 수컷 초파리 뇌 배선(MaleCNS, 뉴런 166,700개)이 브라우저 안에서 실제 위치에서 발화하며 2D 초파리를 걷게 합니다. 설치 없음, 15MB.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Ctext y='32' font-size='32'%3E🪰%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.164.1/examples/jsm/"}}</script>
+<style>
+:root{--bg:#0b0e14;--surface:#131822;--line:#262e3d;--text:#f2f4f7;--muted:#98a2b3;--accent:#ffd60a;--ink:#141200}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:"Pretendard Variable",Pretendard,"Noto Sans KR",system-ui,sans-serif;font-size:14px;line-height:1.55}
+a{color:inherit}button{font:inherit;color:var(--text);background:transparent;border:1px solid #3a4356;padding:9px 12px;cursor:pointer;border-radius:4px}button:hover{background:#1a2130}button[aria-pressed=true],button.primary{background:var(--accent);color:var(--ink);border-color:var(--accent);font-weight:800}
+header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 18px;border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none}.brand img{width:32px;height:32px;border-radius:50%;border:2px solid var(--accent);object-fit:cover}.brand b{display:block;font-weight:900;font-size:14px}.brand b em{font-style:normal;color:var(--accent)}.brand small{display:block;font-size:10px;color:var(--muted);letter-spacing:.08em}
+.sub{background:var(--accent);color:var(--ink);font-weight:800;text-decoration:none;padding:8px 12px;border-radius:999px;font-size:12px;white-space:nowrap}
+main{max-width:1240px;margin:0 auto;padding:16px 18px 0}
+.kicker{font-size:11px;letter-spacing:.14em;color:var(--accent);font-weight:700;margin:0 0 6px}
+h1{font-size:clamp(28px,5.2vw,52px);font-weight:900;letter-spacing:-.035em;line-height:1.05;margin:0 0 8px}h1 em{font-style:normal;color:var(--accent)}
+.lede{color:var(--muted);margin:0 0 14px;max-width:760px;font-size:14px}
+.duo{display:grid;grid-template-columns:1.05fr 1fr;gap:10px}
+.panel{position:relative;background:#0e121a;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.panel-top{position:absolute;left:0;right:0;top:0;display:flex;justify-content:space-between;align-items:center;padding:8px 12px;font-size:11px;color:var(--muted);z-index:2;background:linear-gradient(#0e121ad0,#0e121a00)}
+.panel-top b{color:var(--text);font-weight:800}
+canvas#c{display:block;width:100%;height:auto;touch-action:manipulation}
+#brain{height:100%;min-height:420px}#brain canvas{display:block;width:100%;height:100%}
+.legend{position:absolute;left:12px;bottom:10px;display:flex;flex-wrap:wrap;gap:8px 12px;font-size:10px;color:var(--muted);z-index:2}.legend i{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:4px;vertical-align:middle}
+#loading{position:absolute;inset:0;z-index:5;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;background:#0e121a;text-align:center;padding:20px}
+#loading[hidden]{display:none}#loading progress{width:min(300px,80%);height:8px;accent-color:var(--accent)}#loading small{color:var(--muted)}
+.hint{position:absolute;left:10px;bottom:10px;background:#131822ee;border:1px solid var(--line);padding:8px 10px;border-radius:4px;font-size:12px;z-index:2}.hint b{display:block}
+.status{position:absolute;left:12px;top:34px;font-size:11px;color:var(--muted);z-index:2}.status i{display:inline-block;width:6px;height:6px;border-radius:50%;background:#556070;margin-right:6px;vertical-align:middle}.status i.live{background:var(--accent);box-shadow:0 0 8px var(--accent)}
+.count{position:absolute;right:12px;top:34px;font-size:14px;font-weight:900;color:var(--accent);z-index:2;text-shadow:0 0 12px #ffd60a88}
+.flow{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin:12px 0}
+.flow div{position:relative;background:var(--surface);border:1px solid var(--line);padding:9px 10px 8px;border-radius:6px;overflow:hidden}.flow small{display:block;font-size:10px;color:var(--muted);letter-spacing:.05em}.flow b{display:block;font-size:15px;color:var(--accent);font-variant-numeric:tabular-nums;margin-top:2px}.flow i{display:block;font-style:normal;font-size:10px;color:var(--muted)}
+.flow div:after{content:'';position:absolute;left:0;bottom:0;height:3px;width:calc(var(--lvl,0)*100%);background:var(--accent);box-shadow:0 0 10px var(--accent);transition:width .15s}
+.controls{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 10px;align-items:center}.controls .label{font-size:11px;color:var(--muted);margin-right:4px}.controls button{font-size:12px;padding:8px 10px}
+.honest{border-left:4px solid var(--accent);background:#17160e;padding:10px 12px;border-radius:4px;font-size:13px;color:#e8e2c0;margin:12px 0}
+details{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:12px 14px;margin:12px 0}summary{cursor:pointer;font-weight:800}details p{color:#cfd5de;font-size:13px;margin:8px 0}
+footer{color:var(--muted);font-size:11px;line-height:1.7;padding:14px 0 34px}footer .mission{color:var(--accent);font-weight:800;font-size:12px}
+@media(max-width:900px){.duo{grid-template-columns:1fr}#brain{min-height:360px;height:360px}.flow{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:520px){.flow{grid-template-columns:repeat(2,1fr)}header{padding:10px 12px}.sub{display:none}main{padding:12px 12px 0}}
+</style></head>
+<body>
+<main>
+<p class="kicker">2026년 9월 공개 · 수컷 초파리 뇌 지도 (MaleCNS) · 설치 없음 · 15MB</p>
+<h1>초파리 뇌가 <em>걷습니다.</em></h1>
+<p class="lede">뉴런 166,700개의 진짜 배선이 여러분 기기 안에서 발화합니다. 오른쪽 뇌의 점 하나가 뉴런 하나이고, 실제 위치에 있습니다. 왼쪽 바닥을 눌러 바나나를 놓으세요. 코가 켜지고, 그 빛이 촉각엽으로, 하강뉴런으로, 척수로 번져 내려가며 초파리가 걸어갑니다. 이 뇌는 학습하지 않습니다.</p>
+<div class="duo">
+ <section class="panel" aria-label="초파리 경기장">
+  <div class="panel-top"><b>경기장</b><span>화면을 눌러 바나나 놓기</span></div>
+  <canvas id="c" width="760" height="760" aria-label="초파리 2D 시뮬레이션"></canvas>
+  <div class="status"><i id="dot"></i><span id="statusText">뇌를 내려받는 중</span></div>
+  <div class="count" id="count"></div>
+  <div class="hint"><b>화면을 눌러 바나나를 놓으세요</b>노란 발자국이 초파리의 길입니다</div>
+ </section>
+ <section class="panel" aria-label="실시간 뇌 활동">
+  <div class="panel-top"><b>뇌 · 실시간 발화</b><span>드래그로 회전 · 스크롤로 확대</span></div>
+  <div id="brain"></div>
+  <div class="legend"><span><i style="background:#ffb020"></i>후각 뉴런(코)</span><span><i style="background:#ffd60a"></i>촉각엽 투사뉴런</span><span><i style="background:#ff7a3d"></i>하강뉴런</span><span><i style="background:#fff176"></i>척수 운동뉴런</span><span><i style="background:#6ba2a1"></i>시각엽(어둡게)</span><span><i style="background:#8eae87"></i>중추뇌</span><span><i style="background:#658376"></i>척수</span></div>
+ </section>
+</div>
+<div id="loading" style="position:fixed"><strong>수컷 초파리 뇌를 내려받는 중…</strong><progress id="prog" max="100" value="0"></progress><small id="progText">뉴런 166,700개 · 연결 2,753,975개 · 배선 13MB + 좌표 2MB</small><small>전부 이 기기 안에서 돌아갑니다. 서버도 계정도 없습니다.</small></div>
+<div class="flow">
+ <div id="n0"><small>냄새 입력</small><b><span id="fInL">0.00</span> · <span id="fInR">0.00</span></b><i>왼쪽 · 오른쪽 더듬이</i></div>
+ <div id="n1"><small>후각 뉴런 (코)</small><b><span id="fOL">0.0</span>% · <span id="fOR">0.0</span>%</b><i>발화율 좌 · 우</i></div>
+ <div id="n2"><small>촉각엽 투사뉴런</small><b><span id="fAL">0.0</span>% · <span id="fAR">0.0</span>%</b><i>좌우 차이 → 회전</i></div>
+ <div id="n3"><small>하강뉴런 (뇌→몸)</small><b><span id="fDN">0.00</span>%</b><i>발화율 → 전진</i></div>
+ <div id="n4"><small>척수 운동뉴런</small><b><span id="fML">0.00</span> · <span id="fMR">0.00</span>%</b><i>왼쪽 · 오른쪽 다리</i></div>
+ <div id="n5"><small>명령 · 틱당 발화</small><b><span id="fFwd">0.00</span> m/s · <span id="fTurn">0.00</span></b><i><span id="fSpk">0</span>개 뉴런 발화 / 틱</i></div>
+</div>
+<div class="controls"><span class="label">실험</span>
+ <button id="clear">바나나 치우기</button>
+ <button data-antenna="normal" aria-pressed="true">더듬이 정상</button><button data-antenna="noLeft" aria-pressed="false">왼쪽 더듬이 제거</button><button data-antenna="swap" aria-pressed="false">좌우 바꿔 끼우기</button>
+ <button id="cut" aria-pressed="false">시냅스 끄기</button><button id="rotate" aria-pressed="true">뇌 자동 회전</button><button id="reset">리셋</button>
+</div>
+<div class="honest"><b>정직하게.</b> 뇌 배선은 진짜(자넬리아·케임브리지·구글 리서치, Cell 2026, CC-BY)이고 시냅스 10개 이상 연결만 넣었습니다. 점 위치는 세포체 좌표(없는 뉴런은 연결 상대의 평균 위치)입니다. 뉴런 하나를 물통처럼 계산하는 단순 모델이며 학습하지 않습니다. 냄새를 어느 뉴런에 넣고 어느 뉴런을 읽어 방향으로 바꿀지는 사람이 정했습니다. 다리 움직임은 운동뉴런 발화율로 속도를 정한 그림이지 근육 시뮬레이션이 아닙니다.</div>
+<details><summary>어떻게 돌아가나</summary>
+<p><b>1. 뇌.</b> 수컷 초파리 중추신경계 배선도에서 뉴런 166,700개, 시냅스 10개 이상 연결 2,753,975개를 12MB 파일로 압축했습니다. 억제성(GABA) 뉴런의 연결은 마이너스입니다.</p>
+<p><b>2. 물통 모델.</b> 뉴런 하나가 물통입니다. 연결된 뉴런이 발화하면 물이 들어오고(억제면 빠지고), 넘치면 발화하고 비웁니다. 0.1초마다 10틱을 돌립니다. 2024년 Shiu 팀 모델의 뼈대와 같습니다.</p>
+<p><b>3. 감각.</b> 바나나까지의 거리와 방향으로 좌우 후각 뉴런에 인공 자극을 넣습니다. 벽에 가까우면 더듬이 기계감각 뉴런에 자극을 넣습니다.</p>
+<p><b>4. 번역.</b> 촉각엽 투사뉴런의 좌우 발화 차이 → 회전, 하강뉴런 발화율 → 전진. 이 식은 microfly(Apache-2.0) 데모의 것을 그대로 썼습니다. 척수 운동뉴런 좌우 발화율은 여섯 다리의 걸음 속도에 씁니다.</p>
+<p><b>5. 뇌 그림.</b> 점 하나가 뉴런 하나, 밝기가 지난 10틱의 발화 수입니다. 실제 세포체 좌표를 씁니다. 반투명 껍질은 세포체 위치의 볼록 껍질(참고용)입니다.</p>
+</details>
+<footer><p>뇌 데이터: MaleCNS v1.0, Berg 외, <i>Cell</i> (2026), HHMI Janelia · Univ. of Cambridge · Google Research, CC-BY 4.0 · 물통 모델·번역식·뇌 뷰어: microfly(Apache-2.0) 바탕 · <a href="http://localhost:5173/">한 뇌 여러 몸(5173)</a> · <a href="http://localhost:5174/">마이크로덕 3D(5174)</a> · <b><a href="https://github.com/shinekim0486/microduck" target="_blank" rel="noopener">GitHub: shinekim0486/microduck ↗</a></b></p></footer>
+</main>
+<script type="module" src="app.js"></script>
+</body></html>
