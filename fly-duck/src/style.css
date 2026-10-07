@@ -175,16 +175,16 @@ h2{font-family:inherit}
 .embed .flow{display:flex}.embed .flow-node{flex:1 1 30%}
 @media(max-width:730px){.flow-node{flex:1 1 42%}}
 
-/* 히어로(채널 배너) */
-.hero{position:relative;overflow:hidden;border:1px solid var(--line);margin:18px 0 14px;padding:0;min-height:300px;display:flex;align-items:flex-end;background:#0b0e14}
-.hero-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;opacity:.55;filter:saturate(1.1)}
-.hero:after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,#0b0e14f2 0%,#0b0e14d9 45%,#0b0e1466 100%),linear-gradient(0deg,#0b0e14 0%,#0b0e1400 55%)}
+/* 히어로 (검은색 배경) */
+.hero{position:relative;overflow:hidden;border:1px solid var(--line);margin:18px 0 14px;padding:0;min-height:220px;display:flex;align-items:flex-end;background:#000000}
+.hero-bg{display:none}
+.hero:after{display:none}
 .hero-body{position:relative;z-index:1;padding:36px 32px 30px;max-width:760px}
 .brand-chip{display:inline-block;font-size:10px;font-weight:800;letter-spacing:.12em;color:var(--accent-ink);background:var(--accent);padding:5px 9px;margin-bottom:14px;border-radius:3px}
 .hero .kicker{margin-bottom:10px}
 .hero h1{text-shadow:0 2px 20px #000a}
 .hero .lede{color:#dfe5ee;text-shadow:0 1px 10px #000c}
-@media(max-width:730px){.hero{min-height:240px}.hero-body{padding:22px 16px 20px}.hero-bg{opacity:.4}}
+@media(max-width:730px){.hero{min-height:200px}.hero-body{padding:22px 16px 20px}}
 /* 만든 사람 */
 .maker{display:grid;grid-template-columns:auto 1fr auto;gap:22px;align-items:center;background:var(--surface);border:1px solid var(--line);border-top:3px solid var(--accent);padding:22px 24px;margin-top:14px}
 .maker img{width:72px;height:72px;border-radius:50%;object-fit:cover;border:3px solid var(--accent)}
