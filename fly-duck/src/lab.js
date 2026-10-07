@@ -1,4 +1,4 @@
-// CONNECT AI LAB 추가 기능: 실험 안내 버튼, 실시간 신호 흐름, 60초 바나나 챌린지, 공유.
+// 인공지능 공부하기 추가 기능: 실험 안내 버튼, 실시간 신호 흐름, 60초 바나나 챌린지, 공유.
 // 원작의 시뮬레이션 코드는 건드리지 않고 window.flyduck 텔레메트리와 기존 버튼만 사용한다.
 const $=id=>document.getElementById(id);
 const fd=()=>window.flyduck;
@@ -24,7 +24,7 @@ $('ch-start').onclick=()=>{
   $('ch-time').textContent='60';$('ch-score').textContent='0';$('ch-msg').textContent='시작! 바닥을 클릭해 오리 앞에 바나나를 놓으세요.';$('ch-start').textContent='다시 시작';
 };
 $('ch-share').onclick=async()=>{
-  const score=$('ch-score').textContent,text=`초파리 뇌 오리 60초 챌린지: 바나나 ${score}개 🍌 진짜 초파리 뇌 배선이 로봇 오리를 조종합니다. ${location.href.split('?')[0]} — CONNECT AI LAB`;
+  const score=$('ch-score').textContent,text=`초파리 뇌 오리 60초 챌린지: 바나나 ${score}개 🍌 진짜 초파리 뇌 배선이 로봇 오리를 조종합니다. ${location.href.split('?')[0]} — 인공지능 공부하기`;
   try{if(navigator.share){await navigator.share({text});$('ch-msg').textContent='공유했습니다.';}else{await navigator.clipboard.writeText(text);$('ch-msg').textContent='결과 문장을 복사했습니다. 댓글이나 커뮤니티에 붙여 넣어 보세요.';}}
   catch{$('ch-msg').textContent=text;}
 };

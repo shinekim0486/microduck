@@ -29,7 +29,7 @@ footer button:hover{background:transparent;color:#303a34}
 
 #stimulus-label:empty{display:none}
 
-/* ===== CONNECT AI LAB theme (dark · yellow · Pretendard) ===== */
+/* ===== 인공지능 공부하기 theme (dark · yellow · Pretendard) ===== */
 :root{--bg:#0b0e14;--surface:#131822;--surface2:#1a2130;--line:#262e3d;--text:#f2f4f7;--muted:#98a2b3;--accent:#ffd60a;--accent-ink:#141200;font-family:"Pretendard Variable",Pretendard,"Noto Sans KR",-apple-system,BlinkMacSystemFont,system-ui,sans-serif;color:var(--text);background:var(--bg)}
 body{background:var(--bg)}
 button{border-color:var(--line);color:var(--text)}button:hover{background:var(--surface2)}

@@ -7,14 +7,14 @@ sdk: static
 app_file: index.html
 pinned: false
 license: apache-2.0
-short_description: 진짜 초파리 뇌 배선이 브라우저에서 로봇 오리를 조종합니다 (CONNECT AI LAB 한국어판)
+short_description: 진짜 초파리 뇌 배선이 브라우저에서 로봇 오리를 조종합니다 (인공지능 공부하기)
 ---
 
-# 초파리 뇌 오리 — CONNECT AI LAB 가상 신경과학 실험실
+# 초파리 뇌 오리 — 인공지능 공부하기 가상 신경과학 실험실
 
 진짜 초파리 뇌 배선(FlyWire 기반, 뉴런 139,255개 · 연결 2,698,236개)이 여러분의 브라우저 안에서 발화하며 로봇 오리 **마이크로덕**을 조종합니다. 서버도 GPU도 설치도 없습니다.
 
-## 이 실험실에서 할 수 있는 것 (CONNECT AI LAB 제작)
+## 이 실험실에서 할 수 있는 것
 - **실험 3단계 안내:** 바나나 놓기 → 시냅스 끄기 → 뇌 떼기. 클릭만으로 "뇌가 진짜 회로 안에 있다"를 확인합니다.
 - **신호 흐름 띠:** 냄새 입력 → 촉각엽 투사뉴런 → 하강뉴런 → 명령 → 이동 거리가 실시간 숫자로 보입니다.
 - **더듬이 실험:** 왼쪽·오른쪽 더듬이 제거, 좌우 바꿔 끼우기, 냄새 도달 거리 조절. 실제 곤충 실험과 같은 결과가 나오는지 봅니다.
@@ -22,7 +22,7 @@ short_description: 진짜 초파리 뇌 배선이 브라우저에서 로봇 오�
 - **시냅스 세기 실험:** 마취(0.5)부터 발작(6)까지. 원작자가 이득을 4에서 3으로 낮춘 이유를 직접 확인합니다.
 - **60초 바나나 챌린지**와 결과 공유.
 
-## 두 뇌 비교 (compare.html) — CONNECT AI LAB 제작
+## 두 뇌 비교 (compare.html)
 - **왼쪽 FlyWire v783 (암컷, 2024)**: 원작과 같은 그래프. 뉴런 139,255 · 연결 2,698,236.
 - **오른쪽 MaleCNS v1.0 (수컷, 2026년 9월, 구글 리서치 + 자넬리아, Cell)**: 이 저장소에서 직접 변환. 뉴런 166,700(글리아 제외, superclass 있는 전부) · 연결 2,753,975(시냅스 10개 이상만, 전체 시냅스의 54%) · 다리 운동뉴런 815개 포함(뇌 + 배쪽 신경삭).
   - 좌우 판정: somaSide → rootSide → entryNerve → 세포체 x좌표 중앙선 기준(추정). 부호: consensus_nt가 gaba면 음수, 나머지 양수(FlyWire 그래프와 같은 규칙). 세포체 없는 27,038개는 시냅스 파트너 세포체 평균 위치로 표시(3,882개는 전체 평균).
@@ -35,9 +35,9 @@ short_description: 진짜 초파리 뇌 배선이 브라우저에서 로봇 오�
 이 뇌는 학습하지 않습니다. 배선은 고정이고, 냄새를 어느 뉴런에 넣고 어느 뉴런을 읽을지는 사람이 정한 공학적 선택입니다. 균형과 걸음은 마이크로덕이 강화학습으로 배운 정책이 맡습니다. 절제·더듬이·시냅스 실험은 이 모델 안에서의 실험이지 살아 있는 초파리의 증거가 아닙니다.
 
 ## 출처와 라이선스
-- 뇌-오리 연결 시뮬레이션의 바탕: [microfly](https://huggingface.co/spaces/lvwerra/microfly) (Apache-2.0). 실험실 기능·한국어 설계·디자인은 CONNECT AI LAB이 추가했습니다. 뇌 시뮬레이션의 기본 규칙과 디코더 상수는 기본값에서 바탕 코드와 동일합니다.
+- 뇌-오리 연결 시뮬레이션의 바탕: [microfly](https://huggingface.co/spaces/lvwerra/microfly) (Apache-2.0). 뇌 시뮬레이션의 기본 규칙과 디코더 상수는 기본값에서 바탕 코드와 동일합니다.
 - 뇌 데이터 [snedea/flybrain](https://github.com/snedea/flybrain) (MIT, FlyWire v783 기반) · 로봇 [Pollen Robotics MicroDuck](https://huggingface.co/spaces/pollen-robotics/microduck-simulator) (Apache-2.0) · 뇌 메시 [navis-flybrains](https://github.com/navis-org/navis-flybrains) (GPL-3.0, `licenses/`에 별도 보관). 자산 해시는 `provenance.json`.
-- 채널: [CONNECT AI LAB](https://www.youtube.com/@CONNECT-AI-LAB) · 무료 지식 아카이브 [aicitybuilders.com/guide](https://www.aicitybuilders.com/guide)
+- GitHub 저장소: [https://github.com/shinekim0486/microduck](https://github.com/shinekim0486/microduck)
 
 아래는 바탕이 된 원본 기술 문서(영어)입니다.
 

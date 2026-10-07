@@ -102,7 +102,7 @@ async function runEval(){if(evalRun)return; const secs=+$('evalSecs').value||30;
   $('evalH1').textContent=isCo?'시장':'환경';$('evalH2').textContent=isCo?'120일 뒤 현금':'바나나';$('evalH3').textContent=isCo?'파산':'넘어짐';$('evalH4').textContent=isCo?'총 판매':'이동';
   telemetry.lastEval={brain:brainName,body:bodyName,secs,rows,total,falls:fallsT}; evalRun=null; $('evalBtn').disabled=false; $('evalStop').hidden=true;}
 $('evalBtn').onclick=runEval; $('evalStop').onclick=()=>{if(evalRun)evalRun.cancel=true;};
-$('evalCopy').onclick=async()=>{const e=telemetry.lastEval;if(!e)return;const text=`두뇌 성적표 — ${e.brain} × ${e.body} (환경별 ${e.secs}초)\n`+e.rows.map(r=>`${r.env}: 바나나 ${r.bananas} · 넘어짐 ${r.falls} · ${r.dist.toFixed(1)}m`).join('\n')+`\n합계 바나나 ${e.total} · 넘어짐 ${e.falls}\nhttps://wonseokjayjung-fly-bodies.static.hf.space/ — CONNECT AI LAB`;try{await navigator.clipboard.writeText(text);$('evalMsg').textContent='성적표를 복사했습니다.';}catch{$('evalMsg').textContent=text;}};
+$('evalCopy').onclick=async()=>{const e=telemetry.lastEval;if(!e)return;const text=`두뇌 성적표 — ${e.brain} × ${e.body} (환경별 ${e.secs}초)\n`+e.rows.map(r=>`${r.env}: 바나나 ${r.bananas} · 넘어짐 ${r.falls} · ${r.dist.toFixed(1)}m`).join('\n')+`\n합계 바나나 ${e.total} · 넘어짐 ${e.falls}\nhttps://github.com/shinekim0486/microduck — 인공지능 공부하기`;try{await navigator.clipboard.writeText(text);$('evalMsg').textContent='성적표를 복사했습니다.';}catch{$('evalMsg').textContent=text;}};
 // ---- 몸 제어 루프 (실시간 0.02초) ----
 async function runBody(gen){const b=telemetry.body; if(!b)return; let acc=0,prevT=performance.now();
   while(gen===generation&&telemetry.body===b){const now=performance.now();acc+=Math.min(.1,(now-prevT)/1000);prevT=now;

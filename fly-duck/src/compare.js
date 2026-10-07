@@ -12,7 +12,7 @@ window.addEventListener('message',e=>{const s=e.data?.flyduckStats;if(!s)return;
 const last={};window.addEventListener('message',e=>{const s=e.data?.flyduckStats;if(s)last[s.brain]=s;});
 document.getElementById('share-compare').onclick=async()=>{
   const f=last.female,m=last.male,n=(v,d=2)=>Number.isFinite(v)?v.toFixed(d):'-';
-  const text=`두 뇌, 한 오리 (CONNECT AI LAB 비교 실험실)\n같은 로봇 오리, 같은 바나나, 다른 초파리 뇌.\n· 2024 FlyWire 암컷 뇌: 전진 ${n(f?.forward)} m/s · 회전 ${n(f?.turn)} rad/s · 이동 ${n(f?.distance)} m · 바나나 ${f?.collected??0}개\n· 2026 구글 MaleCNS 수컷 뇌: 전진 ${n(m?.forward)} m/s · 회전 ${n(m?.turn)} rad/s · 이동 ${n(m?.distance)} m · 바나나 ${m?.collected??0}개\n두 뇌 모두 학습하지 않습니다. 직접 해보기 → ${location.href.split('?')[0]}`;
+  const text=`두 뇌, 한 오리 (인공지능 공부하기 비교 실험실)\n같은 로봇 오리, 같은 바나나, 다른 초파리 뇌.\n· 2024 FlyWire 암컷 뇌: 전진 ${n(f?.forward)} m/s · 회전 ${n(f?.turn)} rad/s · 이동 ${n(f?.distance)} m · 바나나 ${f?.collected??0}개\n· 2026 구글 MaleCNS 수컷 뇌: 전진 ${n(m?.forward)} m/s · 회전 ${n(m?.turn)} rad/s · 이동 ${n(m?.distance)} m · 바나나 ${m?.collected??0}개\n두 뇌 모두 학습하지 않습니다. 직접 해보기 → ${location.href.split('?')[0]}`;
   const msg=document.getElementById('share-msg');
   try{if(navigator.share){await navigator.share({text});msg.textContent='공유했습니다.';}else{await navigator.clipboard.writeText(text);msg.textContent='비교 결과를 복사했습니다. 댓글이나 커뮤니티에 붙여 넣어 보세요.';}}catch{msg.textContent=text;}
 };

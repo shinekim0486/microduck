@@ -15,7 +15,7 @@ export class FlyBrain {
     for(let i=1;i<=this.n;i++) this.row[i]+=this.row[i-1];
     // Normalize total absolute incoming weight; preserve edges and their signs.
     for(let e=0;e<this.edges;e++) this.w[e]*=gain/Math.max(1,incoming[this.col[e]]);
-    // CONNECT AI LAB 실험실: 기준 가중치(이득 1)와 절제 마스크. 기본값에서는 원작과 동일하게 동작한다.
+    // 인공지능 공부하기 실험실: 기준 가중치(이득 1)와 절제 마스크. 기본값에서는 원작과 동일하게 동작한다.
     this.gain=gain; this.w0=Float32Array.from(this.w,x=>x/gain); this.lesion=new Uint8Array(this.n);
     this.channels=metadata.channels; this.groups=metadata.displayGroups;
     this.v=new Float32Array(this.n); this.refractory=new Uint8Array(this.n);
